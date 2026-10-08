@@ -77,7 +77,7 @@ html_logo = "_static/logo.png"
 html_favicon = "_static/logo.png"
 
 html_theme_options = {
-    "repository_url": "https://github.com/username/research-site",
+    "repository_url": "https://github.com/AlkorStar/research-site",
     "use_repository_button": True,
     "use_issues_button": True,
     "use_download_button": True,
