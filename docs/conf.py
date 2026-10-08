@@ -93,7 +93,7 @@ html_context = {
     "data_version": data_version,
 }
 
-# Нумерация рисунков, таблиц, листингов
+# Нумерация рисунков, таблиц и листингов
 numfig = True
 numfig_format = {
     "figure": "Рис. %s",
