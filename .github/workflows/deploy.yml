@@ -50,11 +50,12 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.HELIOS_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.HELIOS_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+          ssh-keyscan -p ${{ secrets.HELIOS_PORT }} -H ${{ secrets.HELIOS_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
 
       - name: Deploy to Helios
         env:
           HELIOS_HOST: ${{ secrets.HELIOS_HOST }}
+          HELIOS_PORT: ${{ secrets.HELIOS_PORT }}
           HELIOS_USER: ${{ secrets.HELIOS_USER }}
           HELIOS_PATH: ${{ secrets.HELIOS_PATH }}
           HELIOS_URL: ${{ secrets.HELIOS_URL }}
