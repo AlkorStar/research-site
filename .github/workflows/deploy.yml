@@ -1,0 +1,63 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate results
+        run: python scripts/generate_results.py
+
+      - name: Build site (strict)
+        run: sphinx-build -b html -W --keep-going docs _build/html
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: _build/html/
+
+  deploy:
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: _build/html/
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HELIOS_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.HELIOS_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy to Helios
+        env:
+          HELIOS_HOST: ${{ secrets.HELIOS_HOST }}
+          HELIOS_USER: ${{ secrets.HELIOS_USER }}
+          HELIOS_PATH: ${{ secrets.HELIOS_PATH }}
+          HELIOS_URL: ${{ secrets.HELIOS_URL }}
+          HEALTHCHECK_STRING: "Результаты исследования"
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: bash scripts/deploy.sh _build/html/

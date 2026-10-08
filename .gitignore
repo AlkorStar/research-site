@@ -1,0 +1,27 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+
+# Sphinx
+_build/
+docs/_build/
+
+# Генерируемые артефакты
+docs/_static/plot.png
+docs/_static/metrics.json
+docs/_static/t1_chart.png
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Окружение
+.env
+.DS_Store
+Thumbs.db
