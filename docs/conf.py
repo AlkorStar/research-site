@@ -6,7 +6,7 @@ import subprocess
 from datetime import datetime
 
 project = "Результаты исследования"
-author = "Екатерина Алкор"
+author = "Екатерина и София"
 copyright = f"{datetime.now().year}, {author}"
 
 # Базовый URL. Для Helios — вида https://helios.example.ru/~user/research-site/
@@ -24,11 +24,20 @@ def get_git_commit() -> str:
     except Exception:
         return "unknown"
 
-
+# 1. Сначала вычисляем значения
 build_date = datetime.now().strftime("%Y-%m-%d %H:%M")
 git_commit = get_git_commit()
 data_version = os.environ.get("DATA_VERSION", "v1.0")
 
+# 2. Потом создаём словарь подстановок
+myst_substitutions = {
+    "git_commit": git_commit,
+    "build_date": build_date,
+    "data_version": data_version,
+    "site_url": site_url,
+}
+
+# 3. Расширения
 extensions = [
     "myst_parser",
     "sphinxcontrib.bibtex",
@@ -55,11 +64,6 @@ myst_enable_extensions = [
     "tasklist",
 ]
 myst_heading_anchors = 3
-myst_substitutions = {
-    "git_commit": git_commit,
-    "build_date": build_date,
-    "data_version": data_version,
-}
 
 bibtex_bibfiles = ["references.bib"]
 bibtex_default_style = "plain"

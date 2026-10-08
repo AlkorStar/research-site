@@ -19,14 +19,16 @@ bibliography
 - **T1** — сравнительный анализ генераторов статических сайтов (MkDocs, Sphinx, Jupyter Book 2, Pelican) для публикации результатов экспериментов.
 - **P4** — автоматизированное развёртывание сайта на отечественном статическом хостинге (Helios ИТМО) по SSH/rsync с healthcheck, preview-сборками и откатом.
 
-```{admonition} Метаданные сборки
-:class: build-meta
+<div class="build-meta">
+
+**Метаданные сборки**
 
 - Коммит: `{{ git_commit }}`
 - Дата сборки: {{ build_date }}
 - Версия данных: `{{ data_version }}`
 - Базовый URL: `{{ site_url }}`
-```
+
+</div>
 
 ## Ключевые выводы
 
