@@ -44,6 +44,8 @@ ssh -p "$PORT" -i ~/.ssh/id_ed25519 \
 
 # Синхронизация
 rsync -avz --delete \
+  --exclude 'releases' \
+  --exclude 'preview' \
   -e "ssh -p $PORT -i ~/.ssh/id_ed25519 -o UserKnownHostsFile=~/.ssh/known_hosts" \
   "$SRC" "$USER@$HOST:$TARGET/"
 
