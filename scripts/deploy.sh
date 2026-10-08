@@ -22,7 +22,7 @@ fi
 
 echo ">>> Deploy $SRC → $USER@$HOST:$PORT:$TARGET"
 
-# Сохраняем предыдущий релиз
+# Сохраняем предыдущий релиз (только для main)
 if [ -n "$RELEASE_DIR" ]; then
   ssh -p "$PORT" -i ~/.ssh/id_ed25519 \
     -o UserKnownHostsFile=~/.ssh/known_hosts \
@@ -31,12 +31,16 @@ if [ -n "$RELEASE_DIR" ]; then
     mkdir -p '$REMOTE_BASE/releases'
     if [ -f '$REMOTE_BASE/index.html' ]; then
       mkdir -p '$RELEASE_DIR'
-      cp -a '$REMOTE_BASE/index.html' '$RELEASE_DIR/' 2>/dev/null || true
       cp -a '$REMOTE_BASE/.' '$RELEASE_DIR/' 2>/dev/null || true
       echo 'Saved release: $RELEASE_DIR'
     fi
   "
 fi
+
+# Всегда создаём целевой каталог (для main и preview)
+ssh -p "$PORT" -i ~/.ssh/id_ed25519 \
+  -o UserKnownHostsFile=~/.ssh/known_hosts \
+  "$USER@$HOST" "mkdir -p '$TARGET'"
 
 # Синхронизация
 rsync -avz --delete \
